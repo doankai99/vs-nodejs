@@ -38,6 +38,11 @@ const fabricSchema = new Schema({
         type: String
     },
 
+    companyId: {
+        type: Schema.Types.ObjectId,
+        ref: 'CompanyMaster',
+        required: true
+    }
 }, {
     timestamps: true
 });

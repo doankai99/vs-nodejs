@@ -3,7 +3,7 @@ import multer from 'multer';
 
 const upload = multer();
 
-export const addFabricService = async (image, name, color,size, material, price, description) => {
+export const addFabricService = async (image, companyId, name, color,size, material, price, description) => {
     try {
         return new Promise(async (resolve, reject) => {
             try {
@@ -14,7 +14,8 @@ export const addFabricService = async (image, name, color,size, material, price,
                     size,
                     material,
                     price,
-                    description
+                    description,
+                    companyId
                 });
                 resolve({
                     status: 'OK',

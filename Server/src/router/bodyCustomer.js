@@ -1,8 +1,10 @@
 import  express  from "express";
-import { addbodyCustomerController } from "../controller/bodyCustomerController.js";
+import {addBodyCustomerController, bodyOfCustomerController} from "../controller/bodyCustomerController.js";
 
 const router = express.Router()
 
-router.post('/addbody', addbodyCustomerController)
+router.post('/addBody', addBodyCustomerController)
+
+router.get('/bodyOfCustomer/:id', bodyOfCustomerController)
 
 export default router;

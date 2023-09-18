@@ -23,22 +23,6 @@ router.get('/:userId', detailsUserController)
 router.post('/createUser',uploadUserCloud.single('image'), createUserController)
 
 router.post('/login', loginUserController)
-//     .then(response => {
-//     const responseData = response.data;
-//
-//     if (responseData.success) {
-//         const token = responseData.token;
-//
-//         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-//
-//         console.log('Token has been added to headers:', axios.defaults.headers.common['Authorization']);
-//     } else {
-//         console.log('Login was not successful. Server response:', responseData.message);
-//     }
-// })
-//     .catch(error => {
-//         console.error('Error during login:', error);
-//     });
 
 
 export default router;

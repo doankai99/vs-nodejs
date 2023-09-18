@@ -4,14 +4,16 @@ import customerRouter from './customer.js'
 import priceRowRouter from './priceRow.js'
 import bodyCustomerRoter from './bodyCustomer.js'
 import fabricRouter from './Fabric.js'
+import companyFabric from "./companyFabric.js";
 
 const routes = (app) => {
     app.use('/user', userRouter)
     app.use('/product', productRouter)
     app.use('/customer', customerRouter)
     app.use('/price', priceRowRouter)
-    app.use('/bodyCustomer', bodyCustomerRoter)
+    app.use('/v1/bodyCustomer', bodyCustomerRoter)
     app.use('/fabric', fabricRouter)
+    app.use('/v1/masterCompany', companyFabric)
 }
 
 export default routes

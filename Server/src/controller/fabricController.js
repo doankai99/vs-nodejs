@@ -13,10 +13,10 @@ export const fabricController = async (req, res) => {
     try {
         const fileData = req.file
         console.log(fileData)
-        const { name, color, size, material, price, description } = req.body;
+        const { companyId, name, color, size, material, price, description } = req.body;
         console.log('req.body',req.body)
-        if (fileData && name && color && material && price && size && description) {
-            const response = await addFabricService(fileData, name, color,size, material, price, description);
+        if (fileData && companyId && name && color && material && price && size && description) {
+            const response = await addFabricService(fileData, companyId, name, color,size, material, price, description);
             return res.json(response);
         } else {
             if(fileData){

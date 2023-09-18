@@ -60,7 +60,6 @@ export const loginUserServices = async ({email, password}) =>{
         return await new Promise(async (resolve, reject) => {
             try {
                 const isEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email);
-                console.log(email);
                 if (isEmail) {
                     const useDb = await Users.find({ email: email });
 
@@ -69,7 +68,7 @@ export const loginUserServices = async ({email, password}) =>{
                         if (checkPassword) {
                             const access_token = Jwt.sign({ isAdmin: useDb[0].isAdmin, _id: useDb[0]._id, email: useDb[0].email }, 'access_token', { expiresIn: '1h' });
 
-                            const refresh_token = Jwt.sign({ _id: useDb[0]._id }, 'access_token', { expiresIn: '2d' });
+                            const refresh_token = Jwt.sign({ _id: useDb[0]._id }, 'access_token', { expiresIn: '1h' });
 
                             const jwtData = {
                             user: useDb[0]._id,
@@ -77,12 +76,13 @@ export const loginUserServices = async ({email, password}) =>{
                             refresh_token: refresh_token,
                             expires_at: new Date(Date.now() + 36000),
                             };
-                
+
                             await Jwtoken.create(jwtData); 
                             resolve({
                                 status: "OK",
                                 data: {
                                     email: useDb[0].email,
+                                    id: useDb[0]._id,
                                     access_token
                                 }
                             }); 

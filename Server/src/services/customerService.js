@@ -12,7 +12,7 @@ export const addCustomerService = async (fileData, firstName, lastName, gender, 
             try {
                 const isEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email);
                 if (isEmail) {
-                    const isCheckEmail = await Users.find({ email: email });
+                    const isCheckEmail = await Customer.find({ email: email });
                     if (isCheckEmail.length > 0) {
                         resolve({
                             status: 'err',

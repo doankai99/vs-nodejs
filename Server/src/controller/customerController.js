@@ -1,5 +1,3 @@
-import Customer from "../model/customer.js";
-import BodyCustomer from "../model/bodyCustomer.js"
 import {
     addCustomerService,
     deleteCustomerService,
