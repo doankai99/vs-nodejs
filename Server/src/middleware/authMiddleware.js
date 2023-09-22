@@ -1,6 +1,6 @@
 import Jwt from 'jsonwebtoken';
 const authMiddleware = (req, res, next) => {
-    const access_token = req.headers.token.split(' ')[1];
+    const access_token = req.headers.token.split(' ')[0];
       console.log(access_token);
     Jwt.verify(access_token, 'access_token', function(err, user) {
       if (err) {
@@ -8,7 +8,7 @@ const authMiddleware = (req, res, next) => {
           message: 'The user is not authenticated'
         });
       }
-      if (user.role === 1) {
+      if (user.isAdmin) {
         next();
       } else {
         return res.status(403).json({

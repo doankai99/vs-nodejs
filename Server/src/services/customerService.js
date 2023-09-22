@@ -11,7 +11,8 @@ export const addCustomerService = async (fileData, firstName, lastName, gender, 
         return await new Promise(async (resolve, reject) => {
             try {
                 const isEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email);
-                if (isEmail) {
+                const isPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/g.test(password);
+                if (isEmail && isPassword) {
                     const isCheckEmail = await Customer.find({ email: email });
                     if (isCheckEmail.length > 0) {
                         resolve({
@@ -43,7 +44,7 @@ export const addCustomerService = async (fileData, firstName, lastName, gender, 
                 } else {
                     resolve({
                         status: "err",
-                        message: "customer name is not email valid"
+                        message: "email and password is not valid"
                     });
                 }
             } catch (error) {
@@ -86,6 +87,7 @@ export const loginCustomerServices = async ({email, password}) => {
                                 status: "OK",
                                 data: {
                                     email: customerDb[0].email,
+                                    id: customerDb[0]._id,
                                     access_token
                                 }
                             });

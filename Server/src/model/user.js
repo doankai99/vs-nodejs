@@ -47,16 +47,9 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    access_token: {
-        type: String
-
-    },
-    refesh_token: {
-        type: String,
-    },
     isAdmin: {
         type: Number,
-        default: false,
+        default: 0,
     }
 },  {
     timestamps: true,  

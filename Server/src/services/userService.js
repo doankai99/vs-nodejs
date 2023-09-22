@@ -9,7 +9,8 @@ export const createUserServices = async (image, email, password, firstname, last
         return await new Promise(async (resolve, reject) => {
             try {
                 const isEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email);
-                if (isEmail) {
+                const isPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/g.test(password);
+                if (isEmail && isPassword) {
                     const isCheckEmail = await Users.find({ email: email });
                     if (isCheckEmail.length > 0) {
                         resolve({
@@ -62,7 +63,6 @@ export const loginUserServices = async ({email, password}) =>{
                 const isEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email);
                 if (isEmail) {
                     const useDb = await Users.find({ email: email });
-
                     if (useDb) {
                         const checkPassword = bcrypt.compareSync(password, useDb[0].password);
                         if (checkPassword) {
@@ -81,6 +81,7 @@ export const loginUserServices = async ({email, password}) =>{
                             resolve({
                                 status: "OK",
                                 data: {
+                                    isAdmin: useDb[0].isAdmin,
                                     email: useDb[0].email,
                                     id: useDb[0]._id,
                                     access_token

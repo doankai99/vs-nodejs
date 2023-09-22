@@ -1,7 +1,6 @@
 import express from "express";
 import { createUserController, deleteAllUserController, deleteUserController, detailsUserController, getAllUserController, loginUserController, searchUserController, updateUserController, userController } from "../controller/userController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
-import axios from "axios";
 import uploadUserCloud from "../middleware/uploadUser.js";
 
 const router = express.Router()

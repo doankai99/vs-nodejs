@@ -11,9 +11,7 @@ import {deleteFabricService, updateFabricService} from "../services/fabricServic
 
 export const addNewProductController = async (req, res) => {
     const fileData = req.file
-    console.log(fileData)
     const { name, product_type, summary, fabricId} = req.body;
-    console.log('req.body', req.body)
   if( fileData && name && product_type && summary && fabricId){
     const response = await addNewProductService( fileData, name , product_type, summary, fabricId);
     return res.json(response)
