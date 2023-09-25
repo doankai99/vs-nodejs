@@ -1,7 +1,8 @@
 import Customer from "../model/customer.js";
 import BodyCustomer from "../model/bodyCustomer.js";
+import bodyCustomer from "../model/bodyCustomer.js";
 
-export const addBodyCustomerService = (customerId, chest, waist, hips, height, weight) => {
+export const addBodyCustomerService = (customerId, chest, waist, hips, height, weight, chestWidth, backWidth, aroundNeck,) => {
     return new Promise(async (resolve, reject) => {
         try {
             const isCheckCustomer = await BodyCustomer.find({ customerId: customerId });
@@ -14,6 +15,9 @@ export const addBodyCustomerService = (customerId, chest, waist, hips, height, w
                     hips,
                     height,
                     weight,
+                    chestWidth,
+                    backWidth,
+                    aroundNeck
                 });
 
                 resolve({
@@ -57,4 +61,29 @@ export const bodyOfCustomerService = (id) => {
             });
         }
     })
+}
+
+export const allBodyMeasurementsService = () => {
+    try {
+        return new Promise(async (resolve, reject) => {
+            const bodyMeasurements = await bodyCustomer.find().populate('customerId').exec()
+            if(bodyMeasurements) {
+                resolve({
+                    status: 'OK',
+                    body: bodyMeasurements
+                })
+            }else{
+                resolve({
+                    status: 'err',
+                    message: 'error'
+                })
+            }
+        })
+    }catch (error) {
+        console.log(error);
+        return ({
+            message: error,
+            status: 'err'
+        })
+    }
 }

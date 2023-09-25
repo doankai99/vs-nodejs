@@ -7,22 +7,42 @@ const bodyCustomerSchema = new Schema({
         required: true,
         unique: true
     },
+
     chest: {
         type: Number,
         required: true
     },
+
     waist: {
         type: Number,
         required: true
     },
+
     hips: {
         type: Number,
         required: true
     },
+
+    chestWidth: {
+        type: Number,
+        required: true
+    },
+
+    backWidth: {
+        type: Number,
+        required: true
+    },
+
+    aroundNeck: {
+      type: Number,
+      required: true
+    },
+
     height: {
         type: Number,
         required: true
     },
+
     weight: {
         type: Number,
         required: true

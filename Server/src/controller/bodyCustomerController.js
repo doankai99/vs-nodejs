@@ -1,4 +1,4 @@
-import {addBodyCustomerService, bodyOfCustomerService} from "../services/bodyCustomer.js";
+import {addBodyCustomerService, allBodyMeasurementsService, bodyOfCustomerService} from "../services/bodyCustomer.js";
 
 export const addBodyCustomerController = async (req, res) => {
     try {
@@ -7,17 +7,23 @@ export const addBodyCustomerController = async (req, res) => {
             chest,
             waist,
             hips,
+            chestWidth,
+            backWidth,
+            aroundNeck,
             height,
             weight
         } = req.body
-        if(customerId && chest && waist && hips && height && weight) {
+        if(customerId && chest && waist && hips && chestWidth && backWidth && aroundNeck && height && weight) {
             const response = await addBodyCustomerService(
                 customerId,
                 chest,
                 waist,
                 hips,
                 height,
-                weight
+                weight,
+                chestWidth,
+                backWidth,
+                aroundNeck,
             )
             return res.status(200).json(response)
         }
@@ -45,6 +51,18 @@ export const bodyOfCustomerController = async (req, res) => {
         return res.json({
             status: 'err',
             message: e
+        })
+    }
+}
+
+export const allBodyMeasurements = async (req, res) => {
+    try {
+        const response = await allBodyMeasurementsService();
+        return res.status(200).json(response);
+    }catch (error) {
+        return res.json({
+            status: 'err',
+            message: error
         })
     }
 }

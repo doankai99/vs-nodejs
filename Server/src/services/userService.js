@@ -76,11 +76,11 @@ export const loginUserServices = async ({email, password}) =>{
                             refresh_token: refresh_token,
                             expires_at: new Date(Date.now() + 36000),
                             };
-
                             await Jwtoken.create(jwtData); 
                             resolve({
                                 status: "OK",
                                 data: {
+                                    image: useDb[0].image,
                                     isAdmin: useDb[0].isAdmin,
                                     email: useDb[0].email,
                                     id: useDb[0]._id,
