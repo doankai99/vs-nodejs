@@ -1,12 +1,13 @@
-import {addBodyService} from "../services/bodyMeasurementCharst.js";
+import {addBodyService, getBodyMeasurementService} from "../services/bodyMeasurementCharst.js";
 
 export const  addBodyController = async (req, res) => {
     try {
         const {
-            size, gender, height, weight, chestSize, waistSize, hipsSize, chestWidth, backWidth, aroundNeck
+            size, gender, heightFrom, heightTo, weightFrom, weightTo, chestSize, waistSize, hipsSize
         } = req.body
-        if(size && gender && height && weight && chestSize && waistSize && hipsSize && chestWidth && backWidth && aroundNeck) {
-            const response = await addBodyService(size, gender, height, weight, chestSize, waistSize, hipsSize, chestWidth, backWidth, aroundNeck)
+        console.log('req.body', req.body)
+        if(size && gender && heightFrom && heightTo && weightFrom && weightTo && chestSize && waistSize && hipsSize) {
+            const response = await addBodyService(size, gender, heightFrom, heightTo, weightFrom, weightTo, chestSize, waistSize, hipsSize)
             return res.status(200).json(response);
         }else{
             return res.status(400).json({
@@ -14,6 +15,18 @@ export const  addBodyController = async (req, res) => {
                 message: "lỗi r"
             })
         }
+    }catch (e) {
+        return res.status(500).json({
+            status: 'err',
+            message: e.message
+        });
+    }
+}
+
+export const getBodyMeasurementController = async (req, res) => {
+    try {
+        const response = await getBodyMeasurementService()
+        return res.status(200).json(response)
     }catch (e) {
         return res.status(500).json({
             status: 'err',

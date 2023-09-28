@@ -4,26 +4,22 @@ export const addBodyCustomerController = async (req, res) => {
     try {
         const {
             customerId,
+            gender,
             chest,
             waist,
             hips,
-            chestWidth,
-            backWidth,
-            aroundNeck,
             height,
             weight
         } = req.body
-        if(customerId && chest && waist && hips && chestWidth && backWidth && aroundNeck && height && weight) {
+        if(customerId && chest && waist && hips && height && weight) {
             const response = await addBodyCustomerService(
                 customerId,
+                gender,
                 chest,
                 waist,
                 hips,
                 height,
                 weight,
-                chestWidth,
-                backWidth,
-                aroundNeck,
             )
             return res.status(200).json(response)
         }

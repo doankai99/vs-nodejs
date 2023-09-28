@@ -1,43 +1,66 @@
 import Customer from "../model/customer.js";
 import BodyCustomer from "../model/bodyCustomer.js";
 import bodyCustomer from "../model/bodyCustomer.js";
+import BodyMeasurement from "../model/measurementChart.js";
 
-export const addBodyCustomerService = (customerId, chest, waist, hips, height, weight, chestWidth, backWidth, aroundNeck,) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const isCheckCustomer = await BodyCustomer.find({ customerId: customerId });
-
-            if (isCheckCustomer.length === 0) {
-                const newBodyCustomer = await BodyCustomer.create({
-                    customerId,
-                    chest,
-                    waist,
-                    hips,
-                    height,
-                    weight,
-                    chestWidth,
-                    backWidth,
-                    aroundNeck
-                });
-
-                resolve({
-                    status: 'Success',
-                    bodyCustomer: newBodyCustomer,
-                });
-            } else {
-                resolve({
-                    status: 'Warning',
-                    message: 'Customer has already been assigned a bodyCustomer',
-                });
+export const addBodyCustomerService = async (customerId, gender, chest, waist, hips, height, weight) => {
+    try {
+        if(!gender) {
+            const customer = await Customer.findById(customerId);
+            if (customer) {
+                gender = customer.gender;
             }
-        } catch (e) {
-            reject({
-                message: e,
-                status: 'err',
-            });
         }
-    })
-}
+        // Tìm size tương ứng dựa trên height và weight của khách hàng
+        let sizeMeasurement = await BodyMeasurement.findOne({
+            gender: gender,
+            heightFrom: { $lte: height }, // height phải nằm trong khoảng từ heightFrom đến heightTo
+            heightTo: { $gt: height },
+            weightFrom: { $lte: weight }, // weight phải nằm trong khoảng từ weightFrom đến weightTo
+            weightTo: { $gt: weight },
+        });
+
+        if (!sizeMeasurement) {
+            return {
+                status: 'Warning',
+                message: 'Không tìm thấy size phù hợp cho khách hàng.',
+            };
+        }
+        if (!sizeMeasurement) {
+            sizeMeasurement = "Fs";
+        }
+
+        const isCheckCustomer = await BodyCustomer.find({ customerId: customerId });
+
+        if (isCheckCustomer.length === 0) {
+            const newBodyCustomer = await BodyCustomer.create({
+                customerId,
+                chest,
+                waist,
+                gender,
+                hips,
+                height,
+                weight,
+                size: sizeMeasurement.size,
+            });
+
+            return {
+                status: 'Success',
+                bodyCustomer: newBodyCustomer,
+            };
+        } else {
+            return {
+                status: 'Warning',
+                message: 'Customer has already been assigned a bodyCustomer',
+            };
+        }
+    } catch (e) {
+        return {
+            message: e,
+            status: 'err',
+        };
+    }
+};
 
 export const bodyOfCustomerService = (id) => {
     return new Promise(async (resolve, reject) => {

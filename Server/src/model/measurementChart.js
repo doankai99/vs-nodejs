@@ -1,19 +1,28 @@
 import mongoose from "mongoose";
 const {Schema} = mongoose;
 
-const bodyMeasurementSchema = new mongoose.Schema({
+const bodyMeasurementSchema = new Schema({
     size: {
         type: String,
         required: true
     },
     gender: {
-        type: String,
+        type: Number,
+        required: true,
     },
-    height: {
+    heightFrom: {
         type: Number,
         required: true
     },
-    weight: {
+    heightTo: {
+        type: Number,
+        required: true
+    },
+    weightFrom: {
+        type: Number,
+        required: true
+    },
+    weightTo: {
         type: Number,
         required: true
     },
@@ -26,15 +35,8 @@ const bodyMeasurementSchema = new mongoose.Schema({
     hipsSize: {
         type: Number
     },
-    chestWidth: {
-        type: Number
-    },
-    backWidth: {
-        type: Number
-    },
-    aroundNeck: {
-        type: Number
-    },
+}, {
+    timestamps: true
 });
 
 const BodyMeasurement = mongoose.model('BodyMeasurement', bodyMeasurementSchema);

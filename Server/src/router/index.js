@@ -7,6 +7,7 @@ import fabricRouter from './Fabric.js'
 import companyFabric from "./companyFabric.js";
 import bodyMeasurementChart from "./bodyMeasurementChart.js";
 import order from "./order.js";
+import appointment from "./appointment.js";
 
 const routes = (app) => {
     app.use('/v1/user', userRouter)
@@ -18,6 +19,7 @@ const routes = (app) => {
     app.use('/v1/masterCompany', companyFabric)
     app.use('/v1/bodyMeasurementChart', bodyMeasurementChart)
     app.use('/v1/order', order)
+    app.use('/v1/appointment', appointment)
 }
 
 export default routes

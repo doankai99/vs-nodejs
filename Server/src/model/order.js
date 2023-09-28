@@ -50,6 +50,10 @@ const orderSchema = new Schema({
     shippingCode: {
         type: String,
         default: shortid.generate,
+    },
+
+    totalCount: {
+        type: Number
     }
 }, {
     timestamps: true

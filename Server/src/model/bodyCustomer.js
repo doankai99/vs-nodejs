@@ -8,6 +8,25 @@ const bodyCustomerSchema = new Schema({
         unique: true
     },
 
+    gender: {
+      type: Number,
+      required: true
+    },
+
+    size: {
+        type: String,
+    },
+
+    height: {
+        type: Number,
+        required: true
+    },
+
+    weight: {
+        type: Number,
+        required: true
+    },
+
     chest: {
         type: Number,
         required: true
@@ -23,30 +42,6 @@ const bodyCustomerSchema = new Schema({
         required: true
     },
 
-    chestWidth: {
-        type: Number,
-        required: true
-    },
-
-    backWidth: {
-        type: Number,
-        required: true
-    },
-
-    aroundNeck: {
-      type: Number,
-      required: true
-    },
-
-    height: {
-        type: Number,
-        required: true
-    },
-
-    weight: {
-        type: Number,
-        required: true
-    },
 }, {
     timestamps: true
 })

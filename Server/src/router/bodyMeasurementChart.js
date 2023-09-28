@@ -1,7 +1,8 @@
 import  express  from "express";
-import {addBodyController} from "../controller/bodyMeasurementChart.js";
+import {addBodyController, getBodyMeasurementController} from "../controller/bodyMeasurementChart.js";
 
 const router = express.Router()
+    router.post('/addBodyMeasurementChart', addBodyController)
 
-router.post('addBodyMeasurementChart', addBodyController)
+    router.get('/bodyMeasurementChart', getBodyMeasurementController)
 export default router;
