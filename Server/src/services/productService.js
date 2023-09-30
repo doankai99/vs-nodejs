@@ -54,7 +54,7 @@ export const addNewProductService = async (image, name , product_type, summary, 
 export const getAllProductService = async () => {
     return new Promise(async (resolve, reject) => {
         try{
-            const allProducts = await Product.find().populate('fabricId').exec()
+            const allProducts = await Product.find().populate('fabricId').sort({ createdAt: -1 }).exec()
             if(allProducts){
                 resolve({
                     products : allProducts

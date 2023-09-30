@@ -36,7 +36,8 @@ export const addFabricService = async (image, companyId, name, color,size, mater
 export const getAllFabricService = () => {
     return new Promise (async (resolve, reject) => {
         try {
-            const allFabric = await Fabric.find()
+            const allFabric = await Fabric.find().populate('companyId').sort({ createdAt: -1 }).exec()
+            // const allFabric = await Fabric.find()
             if(allFabric){
                 resolve({
                     fabric: allFabric

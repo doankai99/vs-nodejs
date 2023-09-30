@@ -48,7 +48,7 @@ export const addCompanyFabricService = (companyName, email, numberPhone, busines
 export const getAllCompanyMasterService = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const masterCompany = await CompanyMaster.find()
+            const masterCompany = await CompanyMaster.find().sort({ createdAt: -1 })
             if(masterCompany){
                 resolve({
                     masterCompany: masterCompany

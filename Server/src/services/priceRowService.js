@@ -55,7 +55,7 @@ export const getAllPriceProductService = () => {
                         as: "products"
                     }
                 }
-            ]).exec();
+            ]).sort({ createdAt: -1 }).exec();
             //const priceProducts = await PriceRow.find().populate('productId').exec()
             if(priceProducts){
                 resolve({

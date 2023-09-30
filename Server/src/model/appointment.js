@@ -2,11 +2,9 @@ import mongoose from "mongoose";
 const {Schema} = mongoose;
 
 const appointmentSchema = new Schema({
-    customer: {
+    customerId: {
         type: Schema.Types.ObjectId,
         ref: 'Customer',
-        required: true,
-        unique: true
     },
     name: {
         type: String
@@ -24,13 +22,18 @@ const appointmentSchema = new Schema({
     },
 
     date: {
-        type: String,
+        type: Date,
         required: true
     },
 
     time: {
         type: String,
         required: true,
+    },
+
+    status: {
+      type: Number,
+      default: 1,
     },
 
     area: {

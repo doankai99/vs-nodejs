@@ -230,7 +230,7 @@ export const deleteUserService = (_id) => {
 export const getAllUserService = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const allUser = await Users.find()
+            const allUser = await Users.find().sort({ createdAt: -1 })
             if(allUser){
                 resolve({
                     user: allUser

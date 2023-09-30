@@ -4,7 +4,7 @@ export const createOrderByStaffService = (id,customer, product, status, startTim
     return new Promise(async (resolve, reject) => {
         try {
             const newOrder = await Order.create({
-                id,
+                user: id,
                 customer,
                 product,
                 status,

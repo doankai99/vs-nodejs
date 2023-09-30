@@ -146,7 +146,7 @@ export const detailCustomerService = async (id) => {
 export const getAllCustomerService = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const allCustomer = await Customer.find()
+            const allCustomer = await Customer.find().sort({ createdAt: -1 })
             if(allCustomer){
                 resolve({
                     customer: allCustomer
