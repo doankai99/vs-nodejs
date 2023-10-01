@@ -37,7 +37,8 @@ export const addCustomerService = async (fileData, firstName, lastName, gender, 
                     });
                     resolve({
                         status: 'OK',
-                        data: {
+                        customer: {
+                            id: newCustomer._id,
                             email: newCustomer.email,
                         }
                     });

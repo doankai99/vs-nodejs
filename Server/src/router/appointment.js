@@ -2,7 +2,7 @@ import  express  from "express";
 import {
     bookAppointmentController,
     deleteAppointmentController,
-    listAppointmentController
+    listAppointmentController, updateStatusAppointmentController
 } from "../controller/appointmentController.js";
 
 const router = express.Router()
@@ -12,5 +12,7 @@ const router = express.Router()
     router.get('/listAppointment/:id', listAppointmentController)
 
     router.delete('/deleteAppointment/:id', deleteAppointmentController)
+
+    router.put('/updateStatusAppointment/:id', updateStatusAppointmentController)
 
 export default router;

@@ -1,4 +1,9 @@
-import {addBodyCustomerService, allBodyMeasurementsService, bodyOfCustomerService} from "../services/bodyCustomer.js";
+import {
+    addBodyCustomerService,
+    allBodyMeasurementsService,
+    bodyOfCustomerService,
+    createBodyMeasurementCustomerService
+} from "../services/bodyCustomer.js";
 
 export const addBodyCustomerController = async (req, res) => {
     try {
@@ -59,6 +64,27 @@ export const allBodyMeasurements = async (req, res) => {
         return res.json({
             status: 'err',
             message: error
+        })
+    }
+}
+
+export const createBodyMeasurementCustomer = async (req, res) => {
+    try {
+        const customerId = req.params.id
+        const {gender, chest, waist, hips, height, weight} = req.body;
+        if(customerId && gender && chest && waist && hips && height && weight) {
+            const response = await createBodyMeasurementCustomerService(customerId,gender, chest, waist, hips, height, weight)
+            return res.status(200).json(response)
+        }else{
+            return res.status(400).json({
+                status: "Error",
+                message: "Customer does not exist"
+            })
+        }
+    }catch (e) {
+        return res.json({
+            status: 'err',
+            message: e
         })
     }
 }

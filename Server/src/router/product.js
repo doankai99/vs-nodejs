@@ -12,10 +12,10 @@ router.post('/addNewProduct',uploadProduct.single('image'), addNewProductControl
 
 router.get('/getAllProduct', getAllProductController)
 
+router.get('/detailProduct/:id', detailProductController)
+
 router.delete('/delete/:id', deleteProductController)
 
 router.put('/update/:id',uploadProduct.single('image'), updateProductController)
-
-router.get('/:id', detailProductController)
 
 export default router;

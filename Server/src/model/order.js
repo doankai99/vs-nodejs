@@ -19,6 +19,11 @@ const orderSchema = new Schema({
             unique: true,
         }],
 
+    quantity: {
+      type: Number,
+      required: true
+    },
+
     status: {
         type: Number,
         required: true,
@@ -44,6 +49,11 @@ const orderSchema = new Schema({
     paymentMethod: {
         type: Number,
         required: true,
+        default: 0
+    },
+
+    paymentStatus: {
+        type: Number,
         default: 0
     },
 

@@ -1,7 +1,7 @@
 import {
     bookAppointmentService,
     deleteAppointmentService,
-    getAppointmentService
+    getAppointmentService, updateStatusAppointmentService
 } from "../services/appointmentService.js";
 
 export const bookAppointmentController = async (req, res) => {
@@ -28,14 +28,21 @@ export const bookAppointmentController = async (req, res) => {
 }
 
 export const listAppointmentController = async (req,res) => {
-    const id = req.params.id
-    if(id) {
-        const response = await getAppointmentService(id)
-        return res.json(response)
-    } else {
-        return res.status(401).json({
-            status: "Error",
-            message: "b chua login"
+    try {
+        const id = req.params.id
+        if(id) {
+            const response = await getAppointmentService(id)
+            return res.json(response)
+        } else {
+            return res.status(401).json({
+                status: "Error",
+                message: "b chua login"
+            })
+        }
+    }catch (e) {
+        return res.json({
+            status: 'err',
+            message: e
         })
     }
 }
@@ -53,6 +60,29 @@ export const deleteAppointmentController = async (req, res) => {
             })
         }
     }catch (e) {
+        return res.json({
+            status: 'err',
+            message: e
+        })
+    }
+}
 
+export const updateStatusAppointmentController = async (req, res) => {
+    try {
+        const id = req.params.id
+        if(id) {
+            const response = await updateStatusAppointmentService(id)
+            return res.status(200).json(response)
+        }else {
+            return res.status(400).json({
+                status: 'Error',
+                message: 'Does not appointment'
+            })
+        }
+    }catch (e) {
+        return res.json({
+            status: 'err',
+            message: e
+        })
     }
 }

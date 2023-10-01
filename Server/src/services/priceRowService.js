@@ -129,11 +129,11 @@ export const deletePriceService = (_id) => {
 export const detailPriceService = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const findPriceOfProduct = await PriceRow.findById(id)
+            const findPriceOfProduct = await PriceRow.findById(id).populate('productId').exec()
             if(findPriceOfProduct){
                 resolve({
                     status: 'OK',
-                    data: findPriceOfProduct
+                    detailPriceProduct: findPriceOfProduct
                 })
             }else{
                 resolve({

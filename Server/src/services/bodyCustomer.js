@@ -110,3 +110,62 @@ export const allBodyMeasurementsService = () => {
         })
     }
 }
+
+export const createBodyMeasurementCustomerService = async (customerId, gender, chest, waist, hips, height, weight) => {
+    try {
+        if(!gender) {
+            const customer = await Customer.findById(customerId);
+            if (customer) {
+                gender = customer.gender;
+            }
+        }
+        // Tìm size tương ứng dựa trên height và weight của khách hàng
+        let sizeMeasurement = await BodyMeasurement.findOne({
+            gender: gender,
+            heightFrom: { $lte: height }, // height phải nằm trong khoảng từ heightFrom đến heightTo
+            heightTo: { $gt: height },
+            weightFrom: { $lte: weight }, // weight phải nằm trong khoảng từ weightFrom đến weightTo
+            weightTo: { $gt: weight },
+        });
+
+        if (!sizeMeasurement) {
+            return {
+                status: 'Warning',
+                message: 'Không tìm thấy size phù hợp cho khách hàng.',
+            };
+        }
+        if (!sizeMeasurement) {
+            sizeMeasurement = "Fs";
+        }
+        const isCheckCustomer = await BodyCustomer.find({ customerId: customerId });
+
+        if (isCheckCustomer.length === 0) {
+            const newBodyCustomer = await BodyCustomer.create({
+                customerId,
+                chest,
+                waist,
+                gender,
+                hips,
+                height,
+                weight,
+                size: sizeMeasurement.size,
+            });
+
+            return {
+                status: 'Success',
+                bodyCustomer: newBodyCustomer,
+            };
+        }else {
+            return {
+                status: 'Warning',
+                message: 'Customer has already been assigned a bodyCustomer',
+            };
+        }
+    } catch(e){
+            console.log(e);
+            return ({
+                message: e,
+                status: 'err'
+            })
+    }
+}

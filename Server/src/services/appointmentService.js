@@ -1,7 +1,7 @@
 import AppointmentModel from "../model/appointment.js";
 import moment from 'moment';
 import { isAfter } from 'date-fns';
-import {deleteAppointmentController} from "../controller/appointmentController.js";
+import {deleteAppointmentController, updateStatusAppointmentController} from "../controller/appointmentController.js";
 
 export const bookAppointmentService = (customerId, name, phone, email, date, time, area, city, state, country) => {
     return new Promise(async (resolve, reject) => {
@@ -103,4 +103,37 @@ export const deleteAppointmentService = (id) => {
             error: e.message
         };
     }
+}
+
+export const updateStatusAppointmentService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const appointment = await AppointmentModel.findById(id);
+
+            if (!appointment) {
+                reject({
+                    status: 'err',
+                    message: 'The appointment does not exist'
+                });
+                return;
+            }
+
+            const updatedAppointment = await AppointmentModel.findByIdAndUpdate(
+                id,
+                { status: appointment.status === 0 ? 1 : 0 },
+                { new: true }
+            );
+
+            resolve({
+                status: 'OK',
+                appointment: updatedAppointment
+            });
+        }catch (e) {
+            reject({
+                status: 'err',
+                message: 'An error occurred while processing the appointment.',
+                error: e.message
+            });
+        }
+    })
 }
