@@ -1,14 +1,13 @@
 import PriceRow from "../model/priceRow.js";
 import Product from "../model/product.js";
 
-export const addPriceService = async (productId, fabricId, price, discount, startDate, endDate, priceGroup, promotionDescription) => {
+export const addPriceService = async (productId, price, discount, startDate, endDate, priceGroup, promotionDescription) => {
     try {
             return await new Promise (async (resolve, reject) => {
                 try {
                     // productId = await Product.find({productId: productId})
                     const newPrice = await PriceRow.create({
                         productId,
-                        fabricId,
                         price,
                         discount,
                         startDate,
@@ -38,25 +37,8 @@ export const addPriceService = async (productId, fabricId, price, discount, star
 export const getAllPriceProductService = () => {
     return new Promise(async  (resolve, reject) => {
         try {
-            const priceProducts = await PriceRow.aggregate([
-                {
-                    $lookup: {
-                        from: "fabrics",
-                        localField: "fabricId",
-                        foreignField: "_id",
-                        as: "fabric"
-                    }
-                },
-                {
-                    $lookup: {
-                        from: "products",
-                        localField: "productId",
-                        foreignField: "_id",
-                        as: "products"
-                    }
-                }
-            ]).sort({ createdAt: -1 }).exec();
-            //const priceProducts = await PriceRow.find().populate('productId').exec()
+            // const priceProducts = await PriceRow.find().populate('productId').sort({ createdAt: -1 }).exec();
+            const priceProducts = await PriceRow.find().populate('productId').sort({ createdAt: -1 }).exec()
             if(priceProducts){
                 resolve({
                     priceOfProducts : priceProducts

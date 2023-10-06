@@ -22,10 +22,9 @@ const companySchema = new Schema({
         default: 0,
     },
 
-    businessType: {
+    businessType: [{
         type: String,
-        default: '',
-    },
+    }],
 
     businessStatus: {
         type: String,
@@ -34,7 +33,6 @@ const companySchema = new Schema({
 
     productCategories: [{
         type: String,
-        default: [],
     }],
 
     logoUrl: {

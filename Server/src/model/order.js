@@ -13,21 +13,19 @@ const orderSchema = new Schema({
         required: true,
     },
     product: [{
-            type: String,
-            ref: 'PriceRow',
-            required: true,
-            unique: true,
-        }],
+        type: String,
+        ref: 'PriceRow',
+    }],
 
     quantity: {
-      type: Number,
-      required: true
+        type: Number,
+        default: 1,
     },
 
     status: {
         type: Number,
         required: true,
-        default: 0
+        default: 1
     },
 
     startTime: {
@@ -57,13 +55,23 @@ const orderSchema = new Schema({
         default: 0
     },
 
+    // paymentGateway: {
+    //     type: String,
+    //     default: "VNPAY"
+    // },
+    // transactionId: {
+    //     type: String,
+    //     default: null
+    // },
+
     shippingCode: {
         type: String,
         default: shortid.generate,
     },
 
     totalCount: {
-        type: Number
+        type: Number,
+        default: 0
     }
 }, {
     timestamps: true

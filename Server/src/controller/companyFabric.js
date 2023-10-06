@@ -6,7 +6,8 @@ import {
 import {response} from "express";
 
 export const addCompanyFabricController = async (req, res) => {
-    const { companyName,
+    try {
+        const { companyName,
             email,
             numberPhone,
             businessType,
@@ -17,10 +18,9 @@ export const addCompanyFabricController = async (req, res) => {
             district,
             city,
             country
-    } = req.body;
+        } = req.body;
         console.log('req.body', req.body)
-    if(companyName && email && numberPhone && businessType && productCategories && logoUrl ) {
-        try {
+        if(companyName && email && numberPhone && businessType && productCategories && logoUrl ) {
             const response = await addCompanyFabricService(
                 companyName,
                 email,
@@ -34,12 +34,17 @@ export const addCompanyFabricController = async (req, res) => {
                 city,
                 country)
             return res.json(response)
-        }catch (e) {
-            return res.status(500).json({
-                status: 'err',
-                message: e.message
-            });
+        }else{
+            return  res.json({
+                Status: "error",
+                message: "Value not valid"
+            })
         }
+    }catch (e) {
+        return res.status(500).json({
+            status: 'err',
+            message: e.message
+        });
     }
 }
 

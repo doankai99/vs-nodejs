@@ -8,11 +8,6 @@ const priceRowSchema = new Schema({
         ref: 'Product',
         required: true
     },
-    fabricId: {
-        type: Schema.Types.ObjectId,
-        ref: 'Fabric',
-        required: true
-    },
     price: {
         type: Number,
         required: true
@@ -35,7 +30,7 @@ const priceRowSchema = new Schema({
     },
     currency: {
         type: String,
-        default: 'USD'
+        default: 'VND'
     },
     taxRate: {
         type: Number,

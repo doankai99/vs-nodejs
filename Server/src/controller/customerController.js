@@ -132,9 +132,10 @@ export const updateCustomerController = async (req, res) => {
 
 export const deleteCustomerController = async (req, res) => {
    try {
-     const _id = req.params.id
-     if(_id){
-        const response = await deleteCustomerService(_id);
+     const id = req.params.id
+       console.log("id:", id)
+     if(id){
+        const response = await deleteCustomerService(id);
         return res.json(response)
      }
    } catch (error) {

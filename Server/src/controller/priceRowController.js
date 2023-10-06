@@ -9,11 +9,11 @@ import {response} from "express";
 
 export const addPriceController = async (req, res) => {
     try {
-            const {productId, fabricId, price, discount, startDate, endDate, priceGroup, promotionDescription} = req.body
+            const {productId, price, discount, startDate, endDate, priceGroup, promotionDescription} = req.body
         console.log("req.body", req.body)
-            if(productId && fabricId && price && discount && startDate && endDate && priceGroup && promotionDescription){
+            if(productId  && price && discount && startDate && endDate && priceGroup && promotionDescription){
                 try {
-                    const response = await addPriceService(productId, fabricId, price, discount, startDate, endDate, priceGroup, promotionDescription)
+                    const response = await addPriceService(productId, price, discount, startDate, endDate, priceGroup, promotionDescription)
                     return res.json(response) 
                 } catch (error) {
                     return res.status(500).json({

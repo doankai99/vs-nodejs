@@ -3,52 +3,27 @@ import Product from "../model/product.js";
 import { v2 as cloudinaryV2 } from 'cloudinary';
 import multer from 'multer';
 
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, 'uploads/') // Thư mục lưu trữ tạm thời ảnh tải lên
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, Date.now() + '-' + file.originalname) // Đặt tên file mới
-//     }
-// });
-
-// const upload = multer({ storage: storage });
-
 export const addNewProductService = async (image, name , product_type, summary, fabricId) => {
-    try {
-        return await new Promise(async (resolve, reject) => {
-            try {
-                const  fabric = await Fabric.findById(fabricId);
-                if (!fabric) {
-                    reject({
-                        status: 'err',
-                        message: 'Không tìm thấy vật liệu với ID đã cung cấp.'
-                    });
-                    return;
-                }else {
-                    const addNewProduct = await Product.create({
-                        image: image.path,
-                        name,
-                        product_type,
-                        summary,
-                        fabricId
-                    });
-
-                    resolve({
-                        status: 'OK',
-                        message: addNewProduct
-                    });
-                }
-            } catch (error) {
-                reject({
-                    status: 'err',
-                    message: 'Lỗi khi thêm sản phẩm: ' + error.message
-                });
-            }
-        });
-    } catch (error) {
-        return error;
-    }
+    return await new Promise(async (resolve, reject) => {
+        try {
+            const addNewProduct = await Product.create({
+                image: image.path,
+                name,
+                product_type,
+                summary,
+                fabricId
+            });
+            resolve({
+                status: 'OK',
+                message: addNewProduct
+            });
+        } catch (error) {
+            reject({
+                status: 'err',
+                message: 'Error while adding product: ' + error.message
+            });
+        }
+    });
 }
 
 export const getAllProductService = async () => {

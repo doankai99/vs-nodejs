@@ -1,10 +1,9 @@
 import Customer from '../model/customer.js'
-import BodyCustomer from '../model/bodyCustomer.js'
-import customer from "../model/customer.js";
-import {Users} from "../model/user.js";
 import bcrypt from "bcrypt";
 import Jwt from "jsonwebtoken";
 import {Jwtoken} from "../model/jwt.js";
+import Product from "../model/product.js";
+import { v2 as cloudinaryV2 } from 'cloudinary';
 
 export const addCustomerService = async (fileData, firstName, lastName, gender, email, password, numberPhone, street, ward, district, city, country ) => {
     try {
@@ -212,15 +211,21 @@ export const updateCustomerService = async (id, data) => {
     })
 }
 
-export const deleteCustomerService = (_id) => {
+export const deleteCustomerService = (id) => {
     return new Promise (async (resolve, reject) => {
         try {
-            const deleteCustomer = await Customer.findByIdAndDelete(_id)
-            if(deleteCustomer){
-                resolve({
-                    status: 'OK',
-                    message: deleteCustomer
-                })
+            const customer = await Customer.findById(id);
+            const customerId = await Customer.findByIdAndDelete(id)
+            const imageUrl = customer.image
+            if(customerId){
+                if(imageUrl) {
+                    const publicId = imageUrl.split("/").slice(-2).join("/").split(".").slice(0, -1).join(".");
+                    await cloudinaryV2.uploader.destroy(publicId)
+                    resolve({
+                        status: 'OK',
+                        message: customerId
+                    })
+                }
             }else{
                 resolve({
                     status: 'OK',

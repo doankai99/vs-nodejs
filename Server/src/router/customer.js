@@ -23,6 +23,6 @@ router.get('/allInformationCustomer/:customerId', getAllInformationCustomerContr
 
 router.patch('/updateCustomer/:id', updateCustomerController)
 
-router.delete('/delete/:id', deleteCustomerController)
+router.delete('/deleteCustomer/:id', deleteCustomerController)
 
 export default router;
