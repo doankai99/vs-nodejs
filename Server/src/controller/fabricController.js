@@ -60,7 +60,7 @@ export const getDetailFabricController = async (req, res) => {
             })
         }
     } catch (error) {
-        console.log(err);
+        console.log(error);
         return res.json({
             status: 'err',
             message: error
@@ -70,11 +70,20 @@ export const getDetailFabricController = async (req, res) => {
 
 export const updateFabricController = async (req, res) => {
     try {
-        const {id} = req.params
-        const data = req.body
+        const fileData = req.file
+        console.log(fileData)
+        const id = req.params.id
+        console.log(id)
+        const data = req.body;
+        console.log("req.body", req.body)
         if(id && data){
-            const response = await updateFabricService(id, data)
+            const response = await updateFabricService(id, data, fileData)
             return res.status(200).json(response)
+        }else {
+            return res.status(400).json({
+                status: "Err",
+                message: "Lỗi rồi"
+            })
         }
     } catch (error) {
         return res.status(400).json({

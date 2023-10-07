@@ -4,7 +4,7 @@ import {
     createOrderByStaff, customerCreateOrderController,
     deleteOrderController,
     historyOrderController,
-    inactiveOrderController,
+    inactiveOrderController, orderDetailController,
     orderProcessController,
     updateOrderController
 } from "../controller/orderController.js";
@@ -29,5 +29,8 @@ router.put('/updateOrderController', updateOrderController)
 router.put('/confirmActiveOrder/:id', confirmActiveOrderController)
 
 router.delete('/deleteOrder/:id', deleteOrderController)
+
+//Order detail
+router.get('/orderDetail/:id', orderDetailController)
 
 export default router;

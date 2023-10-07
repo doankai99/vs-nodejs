@@ -17,7 +17,7 @@ router.get('/allFabric', getAllFabricController)
 
 router.get('/getDetailFabric', getDetailFabricController)
 
-router.put('/update/:id', updateFabricController)
+router.put('/updateFabric/:id', updateFabricController)
 
 router.delete('/delete/:id', deleteFabricController)
 
