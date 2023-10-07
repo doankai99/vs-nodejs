@@ -2,15 +2,16 @@ import {
     confirmActiveOrderService,
     createOrderByStaffService, customerCreateOrderService,
     deleteOrderService, historyOrderService,
-    inactiveOrderService, orderProcessService, updateOrderService
+    inactiveOrderService, orderDetailService, orderProcessService, updateOrderService
 } from "../services/orderService.js";
 
 export const createOrderByStaff = async (req, res) => {
     try {
         const user = req.params.id
-        const {customer, product, startTime, endTime, shippingAddress, paymentMethod} = req.body
+        const {customer, product, quantity, startTime, endTime, shippingAddress, paymentMethod} = req.body
+        console.log("req.body", req.body)
         if(customer && product && startTime && endTime && shippingAddress && paymentMethod) {
-            const response = await createOrderByStaffService(user,customer, product, startTime, endTime, shippingAddress, paymentMethod)
+            const response = await createOrderByStaffService(user,customer, product, quantity, startTime, endTime, shippingAddress, paymentMethod)
             return res.status(200).json(response)
         }   else {
             return res.json({
@@ -29,9 +30,10 @@ export const createOrderByStaff = async (req, res) => {
 
 export const customerCreateOrderController = async (req, res) => {
     const customer = req.params.id
-    const {product, quantity, startTime, endTime, shippingAddress, paymentMethod} = req.body
-    if(product && startTime && endTime && shippingAddress && paymentMethod) {
-        const response = await customerCreateOrderService(customer, quantity, product, startTime, endTime, shippingAddress, paymentMethod)
+    const {user, product, quantity, shippingAddress, paymentMethod} = req.body
+    console.log('req.body', req.body)
+    if(product && shippingAddress && paymentMethod) {
+        const response = await customerCreateOrderService(user, customer, quantity, product, shippingAddress, paymentMethod)
         return res.status(200).json(response)
     }
 }
@@ -126,5 +128,22 @@ export const deleteOrderController = async (req, res) => {
             status: 'err',
             message: e,
         })
+    }
+}
+
+export const orderDetailController = async (req, res) => {
+    try {
+        const id = req.params.id
+        if(id) {
+            const response = await orderDetailService(id)
+            return res.json(response)
+        }else{
+            return res.status(400).json({
+                status: "ERR",
+                message: "Order does not exist"
+            })
+        }
+    }catch (e) {
+
     }
 }

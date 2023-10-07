@@ -55,15 +55,6 @@ const orderSchema = new Schema({
         default: 0
     },
 
-    // paymentGateway: {
-    //     type: String,
-    //     default: "VNPAY"
-    // },
-    // transactionId: {
-    //     type: String,
-    //     default: null
-    // },
-
     shippingCode: {
         type: String,
         default: shortid.generate,

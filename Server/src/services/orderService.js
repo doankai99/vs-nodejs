@@ -14,21 +14,22 @@ const calculateTotal = async (order) => {
         const now = new Date()
 
         if (now >= startDate && now <= endDate) {
-            total += productPrice.price - (productPrice.price * productPrice.discount / 100) * order.quantity
+            total += (productPrice.price - (productPrice.price * productPrice.discount / 100)) * order.quantity;
         } else {
             total += productPrice.price * order.quantity
         }
     }
-
+    console.log(total);
     return total
 }
-export const createOrderByStaffService = (user,customer, product, startTime, endTime, shippingAddress, paymentMethod) => {
+export const createOrderByStaffService = (user,customer, product, quantity, startTime, endTime, shippingAddress, paymentMethod) => {
     return new Promise(async (resolve, reject) => {
         try {
             const total = await calculateTotal({
                 user,
                 customer,
                 product,
+                quantity,
                 startTime,
                 endTime,
                 shippingAddress,
@@ -57,20 +58,24 @@ export const createOrderByStaffService = (user,customer, product, startTime, end
     })
 }
 
-export const customerCreateOrderService = (customer, quantity, product, startTime, endTime, shippingAddress, paymentMethod) => {
+export const customerCreateOrderService = (user, customer, quantity, product, shippingAddress, paymentMethod) => {
     return new Promise(async (resolve, reject) => {
         try {
             const createOn = new Date()
-            const estimatedDate = createOn.setDate(createOn.getDate() + 7);
+            const estimatedDate = new Date(createOn)
+            estimatedDate.setDate(createOn.getDate() + 7);
             const total = await calculateTotal({
                 customer,
                 product,
+                quantity,
                 shippingAddress,
                 paymentMethod
             })
             const newOrder = await Order.create({
+                user,
                 customer,
                 product,
+                quantity,
                 startTime: createOn,
                 endTime: estimatedDate,
                 shippingAddress,
@@ -248,6 +253,45 @@ export const deleteOrderService = (id) => {
                     status: 'Err',
                     message: "Delete order false"
                 })
+            }
+        }catch (e) {
+            reject({
+                status: 'err',
+                message: 'An error occurred while processing the appointment.',
+                error: e.message
+            });
+        }
+    })
+}
+
+export const orderDetailService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const order = await Order.findById(id)
+                .populate('user')
+                .populate('customer')
+                .populate({
+                    path: 'product',
+                    model: 'PriceRow',
+                    select: 'price discount startDate endDate', // Chọn trường của bảng "PriceRow"
+                    populate: {
+                        path: 'productId', // Trường reference đến "Product"
+                        model: 'Product', // Thay 'Product' bằng tên mô hình Mongoose của bảng "Product"
+                        select: 'name' // Chọn trường "name" của bảng "Product"
+                    }
+                })
+                .exec();
+            if(order){
+                return resolve({
+                    status: "OK",
+                    order: order
+                })
+            }else{
+                reject({
+                    status: "Err",
+                    message: "Order does not exist"
+                })
+                return;
             }
         }catch (e) {
             reject({
