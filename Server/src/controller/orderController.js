@@ -1,8 +1,15 @@
 import {
     confirmActiveOrderService,
-    createOrderByStaffService, customerCreateOrderService,
-    deleteOrderService, historyOrderService,
-    inactiveOrderService, orderDetailService, orderProcessService, updateOrderService
+    createOrderByStaffService,
+    customerCreateOrderService,
+    deleteOrderService,
+    historyOrderService,
+    inactiveOrderService,
+    listOrderCustomerService,
+    orderDetailService,
+    orderProcessService,
+    updateOrderService,
+    updateStatusOrderService
 } from "../services/orderService.js";
 
 export const createOrderByStaff = async (req, res) => {
@@ -144,6 +151,54 @@ export const orderDetailController = async (req, res) => {
             })
         }
     }catch (e) {
+        console.log(e);
+        return res.json({
+            status: 'err',
+            message: e,
+        })
+    }
+}
 
+export const listOrderCustomerController = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if(id) {
+            const response = await listOrderCustomerService(id);
+            return res.status(200).json(response)
+        }else{
+            res.status(400).json({
+                status: "Err",
+                message: "Customer is unKnown"
+            })
+        }
+    }catch (e) {
+        console.log(e);
+        return res.json({
+            status: 'err',
+            message: e,
+        })
+    }
+}
+
+export const updateStatusOrderController = async (req, res) => {
+    try {
+        const id = req.params.id
+        const data = req.body
+        console.log('req.body', req.body)
+        if(id && data) {
+            const response = await updateStatusOrderService(id, data);
+            return res.status(200).json(response)
+        }else{
+            res.status(400).json({
+                status: "Err",
+                message: "Order not found"
+            })
+        }
+    }catch (e) {
+        console.log(e);
+        return res.json({
+            status: 'err',
+            message: e,
+        })
     }
 }

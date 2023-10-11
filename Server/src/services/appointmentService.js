@@ -137,3 +137,32 @@ export const updateStatusAppointmentService = (id) => {
         }
     })
 }
+
+export const getListAppointmentService = () => {
+    try {
+        return new Promise(async (resolve, reject) => {
+            const appointmentActive = await AppointmentModel.find({status:  1 }).populate('customerId').exec()
+            const appointmentDone = await AppointmentModel.find({status: 2}).populate('customerId').exec()
+            const appointmentClose = await AppointmentModel.find({status: 0}).populate('customerId').exec()
+            if(appointmentActive || appointmentDone || appointmentClose) {
+                return resolve({
+                    status: "OK",
+                    appointmentActive: appointmentActive,
+                    appointmentDone: appointmentDone,
+                    appointmentClose: appointmentClose
+                })
+            }else{
+                return reject({
+                    status: "Error",
+                    message: "Appointment not found"
+                })
+            }
+        })
+    }catch (e) {
+        return ({
+            status: 'err',
+            message: 'An error occurred while processing the appointment.',
+            error: e.message
+        });
+    }
+}

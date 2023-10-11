@@ -11,7 +11,7 @@ export const addPriceController = async (req, res) => {
     try {
             const {productId, price, discount, startDate, endDate, priceGroup, promotionDescription} = req.body
         console.log("req.body", req.body)
-            if(productId  && price && discount && startDate && endDate && priceGroup && promotionDescription){
+            if(productId  && price && discount && startDate && endDate && priceGroup){
                 try {
                     const response = await addPriceService(productId, price, discount, startDate, endDate, priceGroup, promotionDescription)
                     return res.json(response) 

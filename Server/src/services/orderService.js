@@ -129,7 +129,7 @@ export const inactiveOrderService = () => {
 export const historyOrderService = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const historyOrder = await Order.find({status: 0 || 5})
+            const historyOrder = await Order.find({status: { $in: [0, 5] }})
                 .populate('customer')
                 .populate('product')
                 .populate('user')
@@ -159,7 +159,7 @@ export const historyOrderService = () => {
 export const orderProcessService = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const orderProcess = await Order.find({status: 2 || 3 || 4})
+            const orderProcess = await Order.find({status: { $in: [2, 3, 4] }})
                 .populate('customer')
                 .populate('product')
                 .populate('user')
@@ -217,7 +217,7 @@ export const confirmActiveOrderService = (id) => {
         try {
            const isCheckOrder = await Order.findById(id);
            if(isCheckOrder) {
-               const updateStatusOrder = await  Order.findByIdAndUpdate(id, {status: isCheckOrder.status === 1 ? 2 : 1},{ new: true })
+               const updateStatusOrder = await Order.findByIdAndUpdate(id, {status: isCheckOrder.status === 1 ? 2 : 1},{ new: true })
                resolve({
                    status: 'OK',
                    appointment: updateStatusOrder
@@ -275,9 +275,9 @@ export const orderDetailService = (id) => {
                     model: 'PriceRow',
                     select: 'price discount startDate endDate', // Chọn trường của bảng "PriceRow"
                     populate: {
-                        path: 'productId', // Trường reference đến "Product"
-                        model: 'Product', // Thay 'Product' bằng tên mô hình Mongoose của bảng "Product"
-                        select: 'name' // Chọn trường "name" của bảng "Product"
+                        path: 'productId',
+                        model: 'Product',
+                        select: 'name image'
                     }
                 })
                 .exec();
@@ -301,4 +301,76 @@ export const orderDetailService = (id) => {
             });
         }
     })
+}
+
+export const listOrderCustomerService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const order = await Order.find({customer: id})
+                .populate('user')
+                .populate('customer')
+                .populate({
+                    path: 'product',
+                    model: 'PriceRow',
+                    select: 'price discount startDate endDate',
+                    populate: {
+                        path: 'productId',
+                        model: 'Product',
+                        select: 'name image summary'
+                    }
+                }).sort({createAt: -1})
+                .exec();
+            if(order) {
+                return resolve({
+                    status: "OK",
+                    order: order
+                })
+            }else{
+                reject({
+                    status: "Err",
+                    message: "Order does not exist"
+                })
+                return;
+            }
+        }catch (e) {
+            reject({
+                status: 'err',
+                message: 'An error occurred while processing the appointment.',
+                error: e.message
+            });
+        }
+    })
+}
+
+export const updateStatusOrderService = async (id, data) => {
+    try {
+        const order = await Order.findById(id)
+        if(order){
+            return new Promise( async (resolve, reject) => {
+                const updatedOrder = await Order.findByIdAndUpdate(id, data)
+                if(updatedOrder){
+                    return resolve({
+                        status: "Ok",
+                        order: await updatedOrder.populate('customer')
+                    })
+                }else{
+                    return reject({
+                        status: "Err",
+                        message: "order is unKnown"
+                    });
+                }
+            })
+        }else{
+            return res.status(400).json({
+                status: "Err",
+                message: "Order not found"
+            })
+        }
+    }catch (e) {
+        console.log(e);
+        return res.json({
+            status: 'err',
+            message: e,
+        })
+    }
 }

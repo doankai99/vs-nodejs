@@ -38,7 +38,7 @@ const customerSchema = new Schema({
 
     isActive: {
         type: Boolean,
-        default: true,
+        default: false,
     },
 
     street: {
