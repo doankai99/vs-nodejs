@@ -22,7 +22,7 @@ router.get('/historyOrder', historyOrderController)
 //get order Active
 router.get('/orderProcess', orderProcessController)
 //Update status order
-// router.put('/updateOrderController', updateOrderController)
+router.put('/updateOrderController', updateOrderController)
 //confirm order
 router.put('/confirmActiveOrder/:id', confirmActiveOrderController)
 //delete order

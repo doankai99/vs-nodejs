@@ -159,7 +159,12 @@ export const historyOrderService = () => {
 export const orderProcessService = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const orderProcess = await Order.find({status: { $in: [2, 3, 4] }})
+            const orderProcess = await Order.find({status: { $in: [2, 3] }})
+                .populate('customer')
+                .populate('product')
+                .populate('user')
+                .sort({ createdAt: -1 }).exec()
+            const orderDelivery = await Order.find({status:  4})
                 .populate('customer')
                 .populate('product')
                 .populate('user')
@@ -167,7 +172,8 @@ export const orderProcessService = () => {
             if(orderProcess) {
                 return resolve({
                     status: "OK",
-                    order : orderProcess
+                    order : orderProcess,
+                    orderDelivery: orderDelivery
                 })
                 return;
             }else{

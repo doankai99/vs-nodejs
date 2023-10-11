@@ -138,6 +138,39 @@ export const updateStatusAppointmentService = (id) => {
     })
 }
 
+export const updateStatusByStaffService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const appointment = await AppointmentModel.findById(id);
+
+            if (!appointment) {
+                reject({
+                    status: 'err',
+                    message: 'The appointment does not exist'
+                });
+                return;
+            }
+
+            const updatedStatusDone = await AppointmentModel.findByIdAndUpdate(
+                id,
+                { status: appointment.status === 1 ? 2 : 1 },
+                { new: true }
+            );
+
+            resolve({
+                status: 'OK',
+                appointment: updatedStatusDone
+            });
+        }catch (e) {
+            reject({
+                status: 'err',
+                message: 'An error occurred while processing the appointment.',
+                error: e.message
+            });
+        }
+    })
+}
+
 export const getListAppointmentService = () => {
     try {
         return new Promise(async (resolve, reject) => {
