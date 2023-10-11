@@ -25,8 +25,6 @@ export const addBodyCustomerService = async (customerId, gender, chest, waist, h
                 status: 'Warning',
                 message: 'Không tìm thấy size phù hợp cho khách hàng.',
             };
-        }
-        if (!sizeMeasurement) {
             sizeMeasurement = "Fs";
         }
 
@@ -43,7 +41,7 @@ export const addBodyCustomerService = async (customerId, gender, chest, waist, h
                 weight,
                 size: sizeMeasurement.size,
             });
-
+            await Customer.findByIdAndUpdate(customerId, { isActive: true });
             return {
                 status: 'Success',
                 bodyCustomer: newBodyCustomer,
