@@ -1,13 +1,13 @@
 import {
     bookAppointmentService,
     deleteAppointmentService,
-    getAppointmentService, getListAppointmentService, updateStatusAppointmentService
+    getAppointmentService, getListAppointmentService, updateStatusAppointmentService, updateStatusByStaffService
 } from "../services/appointmentService.js";
 
 export const bookAppointmentController = async (req, res) => {
     try {
         const customerId = req.params.id
-        const {name, phone, email, date, time, area, city, state, country} = req.bod
+        const {name, phone, email, date, time, area, city, state, country} = req.body
         if(name && phone && email && date && time) {
             const response = await bookAppointmentService(customerId, name, phone, email, date, time, area, city, state, country)
             return res.status(200).json(response);
@@ -72,6 +72,26 @@ export const updateStatusAppointmentController = async (req, res) => {
             const response = await updateStatusAppointmentService(id)
             return res.status(200).json(response)
         }else {
+            return res.status(400).json({
+                status: 'Error',
+                message: 'Does not appointment'
+            })
+        }
+    }catch (e) {
+        return res.json({
+            status: 'err',
+            message: e
+        })
+    }
+}
+
+export const updateStatusByStaffController = async (req, res) => {
+    try {
+        const id = req.params.id
+        if(id) {
+            const response = await updateStatusByStaffService(id)
+            return res.status(200).json(response)
+        }else{
             return res.status(400).json({
                 status: 'Error',
                 message: 'Does not appointment'
