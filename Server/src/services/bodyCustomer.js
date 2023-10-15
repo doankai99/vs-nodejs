@@ -25,7 +25,7 @@ export const addBodyCustomerService = async (customerId, gender, chest, waist, h
                 status: 'Warning',
                 message: 'Không tìm thấy size phù hợp cho khách hàng.',
             };
-            sizeMeasurement = "Fs";
+            sizeMeasurement = { size: "FS" };
         }
 
         const isCheckCustomer = await BodyCustomer.find({ customerId: customerId });
