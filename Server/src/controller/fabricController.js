@@ -70,11 +70,11 @@ export const getDetailFabricController = async (req, res) => {
 
 export const updateFabricController = async (req, res) => {
     try {
-        const fileData = req.file
-        console.log(fileData)
         const id = req.params.id
-        console.log(id)
+        const fileData = req.file
         const data = req.body;
+        console.log(fileData)
+        console.log(id)
         console.log("req.body", req.body)
         if(id && data){
             const response = await updateFabricService(id, data, fileData)

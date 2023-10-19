@@ -138,3 +138,37 @@ export const detailProductService = (id) => {
         }
     })
 }
+
+export const filterProductService = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const products = await Product.find().populate({
+                path: 'fabricId',
+                select: 'name color'
+            }).exec();;
+            if (Array.isArray(products) && products.length > 0) {
+                // Thực hiện việc lọc dựa trên dữ liệu bạn nhận được
+                const filteredProducts = products.filter((product) => {
+                    // Bắt đầu với tất cả sản phẩm và lọc dựa trên các trường có sẵn trong dữ liệu.
+                    for (const key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            // Kiểm tra xem giá trị trong trường dữ liệu có tồn tại trong sản phẩm không
+                            if (product[key] && product[key].toLowerCase().includes(data[key].toLowerCase())) {
+                                continue;
+                            } else {
+                                return false;
+                            }
+                        }
+                    }
+                    return true;
+                });
+
+                resolve(filteredProducts);
+            } else {
+                resolve([]);
+            }
+        }catch (e) {
+            reject(e);
+        }
+    })
+}

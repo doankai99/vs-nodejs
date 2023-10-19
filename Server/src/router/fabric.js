@@ -17,7 +17,7 @@ router.get('/allFabric', getAllFabricController)
 
 router.get('/getDetailFabric', getDetailFabricController)
 
-router.put('/updateFabric/:id', updateFabricController)
+router.put('/updateFabric/:id',uploadCloud.single('image'), updateFabricController)
 
 router.delete('/delete/:id', deleteFabricController)
 

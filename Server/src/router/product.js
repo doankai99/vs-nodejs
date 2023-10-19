@@ -1,7 +1,7 @@
 import express from "express";
 import {
     addNewProductController,
-    deleteProductController, detailProductController,
+    deleteProductController, detailProductController, filterProductController,
     getAllProductController, updateProductController
 } from "../controller/productController.js";
 import uploadProduct from "../middleware/uploadProduct.js";
@@ -17,5 +17,7 @@ router.get('/detailProduct/:id', detailProductController)
 router.delete('/delete/:id', deleteProductController)
 
 router.put('/update/:id',uploadProduct.single('image'), updateProductController)
+
+router.post('/filterProduct', filterProductController)
 
 export default router;
