@@ -1,6 +1,16 @@
 import { Users } from '../model/user.js'
 import bcrypt from 'bcrypt'
-import { createUserServices, loginUserServices, getDetailUserService, searchUserService, updateUserService, deleteUserService, getAllUserService, deleteAllUserService } from '../services/userService.js';
+import {
+    createUserServices,
+    loginUserServices,
+    getDetailUserService,
+    searchUserService,
+    updateUserService,
+    deleteUserService,
+    getAllUserService,
+    deleteAllUserService,
+    filterUserService
+} from '../services/userService.js';
 import { response } from 'express';
 import  Jwt  from 'jsonwebtoken';
 import cloudinary from 'cloudinary';
@@ -92,10 +102,11 @@ export const loginUserController = async (req, res) => {
 
 export const updateUserController = async (req, res) => {
     try {
-        const {id} = req.params
-        const data = req.body
+        const id = req.params.id
+        const fileData = req.file
+        const data = req.body;
         if(id){
-            const response = await updateUserService(id, data);
+            const response = await updateUserService(id, data, fileData);
             if(response){
                 return res.json(response)
             }else{
@@ -172,4 +183,16 @@ export const deleteAllUserController = async (req, res) => {
         })
     }
 }
+export const filterUserController = async (req, res) => {
+    try {
+        const data = req.body;
+        if(data) {
+            const response = await filterUserService(data)
+            return res.status(200).json(response)
+        }else{
 
+        }
+    }catch (e) {
+
+    }
+}

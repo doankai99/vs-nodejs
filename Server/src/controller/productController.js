@@ -1,7 +1,7 @@
 import Product from '../model/product.js'
 import {
     addNewProductService,
-    deleteProductService, detailProductService,
+    deleteProductService, detailProductService, filterProductService,
     getAllProductService,
     updateProductService
 } from '../services/productService.js';
@@ -79,7 +79,7 @@ export const updateProductController = async (req, res) => {
         }
         return res.json({
             status: 'err',
-            message: 'feild valid'
+            message: 'field valid'
         })
     }
 }
@@ -90,6 +90,22 @@ export const detailProductController = async (req, res) => {
         const response = await detailProductService(id)
         res.status(200).json(response)
     }else{
+        res.status(500).json({
+            status: "Error",
+            message: "Product does not exist"
+        })
+    }
+}
+
+export const filterProductController = async (req, res) => {
+    try {
+        const data = req.body
+        console.log(data)
+        if(data) {
+            const response = await filterProductService(data)
+            return res.status(200).json(response)
+        }
+    }catch (e) {
         res.status(500).json({
             status: "Error",
             message: "Product does not exist"

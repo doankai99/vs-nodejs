@@ -65,30 +65,37 @@ export const getDetailFabricService = () => {
 
 export const updateFabricService = (id, data, fileData) => {
     return new Promise (async (resolve, reject) => {
-        const fabric = await Fabric.findById(id)
-        const newUpdateFabric = await Fabric.findByIdAndUpdate(id, data, fileData)
-        const imageUrl = fabric.image
-        console.log(imageUrl)
-        const updateData = { ...data };
-        if(newUpdateFabric){
-            if(fileData) {
-                if(imageUrl){
-                    const publicId = imageUrl.split("/").slice(-2).join("/").split(".").slice(0, -1).join(".");
-                    await cloudinaryV2.uploader.destroy(publicId)
+        try {
+            const fabric = await Fabric.findById(id)
+            const newUpdateFabric = await Fabric.findByIdAndUpdate(id, data, fileData)
+            const imageUrl = fabric.image
+            console.log(imageUrl)
+            const updateData = { ...data };
+            if(newUpdateFabric){
+                if(fileData) {
+                    if(imageUrl){
+                        const publicId = imageUrl.split("/").slice(-2).join("/").split(".").slice(0, -1).join(".");
+                        await cloudinaryV2.uploader.destroy(publicId)
+                    }
+                    updateData.image = fileData.path;
                 }
-                updateData.image = fileData.path;
-            }
-            const updateFabric = await Fabric.findByIdAndUpdate(id, data)
-            if(updateFabric){
-                resolve({
-                    status: "Ok",
-                    data: updateFabric
+                const updateFabric = await Fabric.findByIdAndUpdate(id, data)
+                if(updateFabric){
+                    resolve({
+                        status: "Ok",
+                        data: updateFabric
+                    })
+                }
+            }else{
+                reject({
+                    Status: 'Error',
+                    message: 'The fabric not defined'
                 })
             }
-        }else{
+        }catch (e) {
             reject({
-                Status: 'Error',
-                message: 'The fabric not defined'
+                message: e,
+                status: 'err'
             })
         }
     })

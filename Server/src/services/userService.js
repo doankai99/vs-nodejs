@@ -3,6 +3,7 @@ import axios from 'axios';
 import bcrypt, { hash } from 'bcrypt'
 import  Jwt  from "jsonwebtoken";
 import { Jwtoken } from "../model/jwt.js";
+import Product from "../model/product.js";
 
 export const createUserServices = async (image, email, password, firstname, lastname, position, street, ward, district, city, country) => {
     try {
@@ -168,7 +169,7 @@ export const searchUserService = async (lastname) => {
     }
 }
 
-export const updateUserService = (id, data) => {
+export const updateUserService = (id, data, fileData) => {
     return new Promise(async (resolve, reject) => {
         try {
             const checkUser = await Users.findOne(data.email)
@@ -179,13 +180,25 @@ export const updateUserService = (id, data) => {
                     message: 'The info of email is duplicate'
                 })
             }
-            const updatedUser = await Users.findByIdAndUpdate(id, data)
+            const user = await Users.findById(id);
+            const updatedUser = await Users.findByIdAndUpdate(id, data, fileData)
+            const imageUrl = user.image
+            const updateData = { ...data };
             if( updatedUser ){
-                const getUserNew = await getDetailUserService(id)
-                resolve({
-                    status: 'Ok',
-                    data: getUserNew
-                })
+                if(fileData) {
+                    if(imageUrl){
+                        const publicId = imageUrl.split("/").slice(-2).join("/").split(".").slice(0, -1).join(".");
+                        await cloudinaryV2.uploader.destroy(publicId)
+                    }
+                    updateData.image = fileData.path;
+                }
+                const updateUser = await Users.findByIdAndUpdate(id, data)
+                if(updateUser) {
+                    resolve({
+                        status: 'Ok',
+                        data: updateUser
+                    })
+                }
             }else{
                 resolve({
                     status: 'err',
@@ -205,8 +218,14 @@ export const updateUserService = (id, data) => {
 export const deleteUserService = (_id) => {
     return new Promise(async (resolve, reject) =>{
         try {
+            const user = await Users.findById(_id);
             const deleteUser = await Users.findByIdAndDelete(_id)
+            const imageUrl = user.image
             if(deleteUser){
+                if(imageUrl) {
+                    const publicId = imageUrl.split("/").slice(-2).join("/").split(".").slice(0, -1).join(".");
+                    await cloudinaryV2.uploader.destroy(publicId)
+                }
                 resolve({
                     status: 'OK',
                     data: deleteUser
@@ -267,6 +286,36 @@ export const deleteAllUserService = (ids) => {
                 message: error,
                 status: 'err'
             })
+        }
+    })
+}
+
+export const filterUserService = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const users = await Users.find()
+            if (Array.isArray(users) && users.length > 0) {
+                const filteredUsers = users.filter((user) => {
+                    // Bắt đầu với tất cả sản phẩm và lọc dựa trên các trường có sẵn trong dữ liệu.
+                    for (const key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            // Kiểm tra xem giá trị trong trường dữ liệu có tồn tại trong sản phẩm không
+                            if (user[key] && user[key].toLowerCase().includes(data[key].toLowerCase())) {
+                                continue;
+                            } else {
+                                return false;
+                            }
+                        }
+                    }
+                    return true;
+                });
+
+                resolve(filteredUsers);
+            } else {
+                resolve([]);
+            }
+        }catch (e) {
+            reject(e);
         }
     })
 }
