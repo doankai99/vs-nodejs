@@ -165,3 +165,26 @@ export const pieChartStatusOrderService = () => {
         }
     })
 }
+
+export const totalStatisticsService = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const orders = await Order.find()
+            const customers = await Customer.find()
+            const appointments = await Appointment.find()
+            let totalCountOrder = 0;
+            // Duyệt qua danh sách đơn đặt hàng và tính tổng totalCount
+            orders.forEach(order => {
+                totalCountOrder += order.totalCount;
+            });
+            resolve({
+                totalOrder: orders.length,
+                totalCustomer: customers.length,
+                totalAppointment: appointments.length,
+                totalCountOrder: totalCountOrder
+            })
+        }catch (e) {
+            reject(e);
+        }
+    })
+}

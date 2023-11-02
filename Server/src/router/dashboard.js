@@ -2,7 +2,7 @@ import express from "express";
 import {
     appointmentDashboardController,
     customerDashboardController,
-    dashboardController, pieChartStatusOrderController
+    dashboardController, pieChartStatusOrderController, totalStatisticsController
 } from "../controller/dashboard.js";
 
 const router = express.Router()
@@ -14,5 +14,7 @@ const router = express.Router()
     router.get('/appointmentDashboard', appointmentDashboardController)
 
     router.get('/pieChartStatusOrder', pieChartStatusOrderController)
+
+    router.get('/totalStatistics', totalStatisticsController)
 
 export default router;

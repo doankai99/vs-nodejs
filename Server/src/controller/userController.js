@@ -9,7 +9,7 @@ import {
     deleteUserService,
     getAllUserService,
     deleteAllUserService,
-    filterUserService
+    filterUserService, updateStatusAdminService
 } from '../services/userService.js';
 import { response } from 'express';
 import  Jwt  from 'jsonwebtoken';
@@ -193,6 +193,25 @@ export const filterUserController = async (req, res) => {
 
         }
     }catch (e) {
+        return res.status(400).json({
+            status: 'err',
+            message: e
+        })
+    }
+}
 
+export const updateStatusAdminController = async (req, res) => {
+    try {
+        const id = req.params.id
+        console.log(id)
+        if(id) {
+            const response = await updateStatusAdminService(id)
+            return res.status(200).json(response)
+        }
+    }catch (e) {
+        return res.status(400).json({
+            status: 'err',
+            message: e
+        })
     }
 }

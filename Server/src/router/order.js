@@ -2,10 +2,10 @@ import  express  from "express";
 import {
     confirmActiveOrderController,
     createOrderByStaff, customerCreateOrderController,
-    deleteOrderController,
+    deleteOrderController, filterOrderController,
     historyOrderController,
     inactiveOrderController, listOrderCustomerController, orderDetailController,
-    orderProcessController,
+    orderProcessController, orderStaffCreatedController,
     updateOrderController, updateStatusOrderController
 } from "../controller/orderController.js";
 
@@ -33,5 +33,8 @@ router.get('/orderDetail/:id', orderDetailController)
 router.get('/listOrderCustomer/:id', listOrderCustomerController)
 //update status order
 router.put('/updateStatusOrder/:id', updateStatusOrderController)
-
+//Filter Order
+router.post('/filterOrder', filterOrderController)
+//List order my staff create
+router.get('/orderStaffCreated/:id', orderStaffCreatedController)
 export default router;

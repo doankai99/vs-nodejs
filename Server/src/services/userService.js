@@ -319,3 +319,32 @@ export const filterUserService = (data) => {
         }
     })
 }
+
+export const updateStatusAdminService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const user = await Users.findOne({_id: id});
+            if(user) {
+                if(user.isAdmin === 0) {
+                    user.isAdmin = 1;
+                    await user.save();
+                    resolve({
+                        message:"update status account success"
+                    });
+                }else{
+                    user.isAdmin = 0;
+                    await user.save();
+                    resolve({
+                        message:"update status account success"
+                    });
+                }
+            }else{
+                reject({
+                    message: "User not found"});
+                return
+            }
+        }catch (e) {
+            reject(e);
+        }
+    })
+}

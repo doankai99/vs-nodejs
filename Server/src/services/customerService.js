@@ -59,7 +59,7 @@ export const addCustomerService = async (fileData, firstName, lastName, gender, 
     }
 }
 
-export const loginCustomerServices = async ({email, password}) => {
+export const loginCustomerServices = async ({ email, password }) => {
     try {
         return await new Promise(async (resolve, reject) => {
             try {
@@ -68,39 +68,56 @@ export const loginCustomerServices = async ({email, password}) => {
                 if (isEmail) {
                     const customerDb = await Customer.find({ email: email });
 
-                    if (customerDb) {
-                        const checkPassword = bcrypt.compareSync(password, customerDb[0].password);
-                        if (checkPassword) {
-                            const access_token = Jwt.sign({ _id: customerDb[0]._id, email: customerDb[0].email }, 'access_token', { expiresIn: '1h' });
+                    if (customerDb.length > 0) { // Check if a customer with that email exists
+                        const customer = customerDb[0];
 
-                            const refresh_token = Jwt.sign({ _id: customerDb[0]._id }, 'access_token', { expiresIn: '2d' });
+                        if (customer.isActive) {
+                            const checkPassword = bcrypt.compareSync(password, customer.password);
 
-                            const jwtData = {
-                                user: customerDb[0]._id,
-                                access_token: access_token,
-                                refresh_token: refresh_token,
-                                expires_at: new Date(Date.now() + 36000),
-                            };
+                            if (checkPassword) {
+                                const access_token = Jwt.sign({ _id: customer._id, email: customer.email }, 'access_token', { expiresIn: '1h' });
 
-                            await Jwtoken.create(jwtData);
+                                const refresh_token = Jwt.sign({ _id: customer._id }, 'access_token', { expiresIn: '2d' });
+
+                                const jwtData = {
+                                    user: customer._id,
+                                    access_token: access_token,
+                                    refresh_token: refresh_token,
+                                    expires_at: new Date(Date.now() + 36000),
+                                };
+
+                                await Jwtoken.create(jwtData);
+                                resolve({
+                                    status: "OK",
+                                    data: {
+                                        email: customer.email,
+                                        id: customer._id,
+                                        image: customer.image,
+                                        access_token,
+                                    }
+                                });
+                            } else {
+                                resolve({
+                                    status: 'err',
+                                    message: 'The username or password is wrong'
+                                });
+                            }
+                        } else {
                             resolve({
-                                status: "OK",
-                                data: {
-                                    email: customerDb[0].email,
-                                    id: customerDb[0]._id,
-                                    access_token
-                                }
+                                status: 'err',
+                                message: 'This account is not active'
                             });
                         }
+                    } else {
                         resolve({
                             status: 'err',
-                            message: 'The use name or password is wrong'
+                            message: 'User with that email does not exist'
                         });
                     }
                 } else {
                     resolve({
                         status: 'err',
-                        message: 'user name is not existed'
+                        message: 'Invalid email format'
                     });
                 }
             } catch (error) {

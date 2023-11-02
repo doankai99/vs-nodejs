@@ -2,12 +2,12 @@ import {
     confirmActiveOrderService,
     createOrderByStaffService,
     customerCreateOrderService,
-    deleteOrderService,
+    deleteOrderService, filterOrderService,
     historyOrderService,
     inactiveOrderService,
     listOrderCustomerService,
     orderDetailService,
-    orderProcessService,
+    orderProcessService, orderStaffCreatedService,
     updateOrderService,
     updateStatusOrderService
 } from "../services/orderService.js";
@@ -192,6 +192,48 @@ export const updateStatusOrderController = async (req, res) => {
             res.status(400).json({
                 status: "Err",
                 message: "Order not found"
+            })
+        }
+    }catch (e) {
+        console.log(e);
+        return res.json({
+            status: 'err',
+            message: e,
+        })
+    }
+}
+
+export const filterOrderController = async (req, res) => {
+    try {
+        const data = req.body;
+        if(data) {
+            const response = await filterOrderService(data)
+            return res.status(200).json(response)
+        }else{
+            res.status(400).json({
+                status: "Err",
+                message: "Order not found"
+            })
+        }
+    }catch (e) {
+        console.log(e);
+        return res.json({
+            status: 'err',
+            message: e,
+        })
+    }
+}
+
+export const orderStaffCreatedController = async (req, res) => {
+    try {
+        const id = req.params.id
+        console.log(id)
+        if(id) {
+            const response = await orderStaffCreatedService(id)
+            return res.status(200).json(response)
+        }else{
+            res.status(403).json({
+                message: "User not found"
             })
         }
     }catch (e) {
