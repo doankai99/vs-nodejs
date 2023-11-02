@@ -7,10 +7,6 @@ const jwtokenSchema = new Schema({
     ref: 'Users',
     required: true,
   },
-  email: {
-    type: String,
-    ref: 'Users'
-  },
   access_token: {
     type: String,
     required: true,
@@ -21,7 +17,8 @@ const jwtokenSchema = new Schema({
   },
   expires_at: {
     type: Date,
-    required: true,
+    default: Date.now,
+    expires: 3600,
   },
 }, {
   timestamps: true,

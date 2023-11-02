@@ -7,7 +7,7 @@ import {
     filterUserController,
     getAllUserController,
     loginUserController,
-    searchUserController,
+    searchUserController, updateStatusAdminController,
     updateUserController,
     userController
 } from "../controller/userController.js";
@@ -35,6 +35,8 @@ router.post('/createUser',uploadUserCloud.single('image'), createUserController)
 router.post('/login', loginUserController)
 
 router.post('/filterUser', filterUserController)
+
+router.get('/updateStatusAdmin/:id', updateStatusAdminController)
 
 export default router;
 // export default axios;

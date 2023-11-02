@@ -2,7 +2,7 @@ import {
     appointmentDashboardService,
     customerDashboardService,
     dashboardService,
-    pieChartStatusOrderService
+    pieChartStatusOrderService, totalStatisticsService
 } from "../services/dashboard.js";
 
 export const dashboardController = async (req, res) => {
@@ -44,6 +44,18 @@ export const appointmentDashboardController = async  (req, res) => {
 export const pieChartStatusOrderController = async (req, res) => {
     try {
         const response = await pieChartStatusOrderService()
+        return res.status(200).json(response)
+    }catch (e) {
+        return res.json({
+            status: 'err',
+            message: e
+        })
+    }
+}
+
+export const totalStatisticsController = async (req, res) => {
+    try {
+        const response = await totalStatisticsService()
         return res.status(200).json(response)
     }catch (e) {
         return res.json({
