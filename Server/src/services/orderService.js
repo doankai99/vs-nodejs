@@ -380,3 +380,92 @@ export const updateStatusOrderService = async (id, data) => {
         })
     }
 }
+
+export const filterOrderService = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const orders = await Order.find()
+                .populate({
+                    path: 'customer',
+                    select: 'firstName lastName'
+                })
+                .populate('product')
+                .populate('user')
+                .exec()
+            if (Array.isArray(orders) && orders.length > 0) {
+                const filteredOrders = orders.filter((order) => {
+                    console.log(order)
+                    // Bắt đầu với tất cả sản phẩm và lọc dựa trên các trường có sẵn trong dữ liệu.
+                    for (const key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            // Kiểm tra xem giá trị trong trường dữ liệu có tồn tại trong sản phẩm không
+                            if (order[key] && order[key].toLowerCase().includes(data[key].toLowerCase())) {
+                                continue;
+                            } else {
+                                return false;
+                            }
+                        }
+                    }
+                    return true;
+                });
+
+                resolve(filteredOrders);
+            } else {
+                resolve([]);
+            }
+        }catch (e) {
+            reject(e);
+        }
+    })
+}
+export const orderStaffCreatedService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const order = await Order.find({user : id})
+                .populate({
+                    path: "customer",
+                    select: "email firstName lastName numberPhone image"
+                })
+                .populate({
+                    path: "product",
+                    model: 'PriceRow',
+                    select: "price discount startDate endDate",
+                    populate: {
+                        path: 'productId',
+                        model: 'Product',
+                        select: 'name image summary'
+                    }
+                }).sort({createAt: -1}).exec()
+            if(order) {
+                resolve({
+                    order: order
+                })
+            }else{
+                resolve({
+                    order: []
+                })
+            }
+        }catch (e) {
+            return reject(e);
+        }
+    })
+}
+
+export const patentedOrderService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const order = await Order.findOne({_id: id})
+            if(order){
+                order.paymentStatus = 1;
+                order.totalCount = 0;
+                await order.save();
+            }else{
+                resolve({
+                    message: "payment false"
+                })
+            }
+        }catch (e) {
+            return reject(e);
+        }
+    })
+}

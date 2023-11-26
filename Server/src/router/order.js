@@ -5,7 +5,7 @@ import {
     deleteOrderController, filterOrderController,
     historyOrderController,
     inactiveOrderController, listOrderCustomerController, orderDetailController,
-    orderProcessController, orderStaffCreatedController,
+    orderProcessController, orderStaffCreatedController, patentedOrderController,
     updateOrderController, updateStatusOrderController
 } from "../controller/orderController.js";
 
@@ -37,4 +37,7 @@ router.put('/updateStatusOrder/:id', updateStatusOrderController)
 router.post('/filterOrder', filterOrderController)
 //List order my staff create
 router.get('/orderStaffCreated/:id', orderStaffCreatedController)
+//update total and payment status when user patented
+router.get('/:id/patentedOrder', patentedOrderController)
+
 export default router;

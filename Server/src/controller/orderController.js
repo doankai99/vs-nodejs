@@ -7,16 +7,16 @@ import {
     inactiveOrderService,
     listOrderCustomerService,
     orderDetailService,
-    orderProcessService, orderStaffCreatedService,
+    orderProcessService, orderStaffCreatedService, patentedOrderService,
     updateOrderService,
     updateStatusOrderService
 } from "../services/orderService.js";
+import Order from "../model/order.js";
 
 export const createOrderByStaff = async (req, res) => {
     try {
         const user = req.params.id
         const {customer, product, quantity, startTime, endTime, shippingAddress, paymentMethod} = req.body
-        console.log("req.body", req.body)
         if(customer && product && startTime && endTime && shippingAddress && paymentMethod) {
             const response = await createOrderByStaffService(user,customer, product, quantity, startTime, endTime, shippingAddress, paymentMethod)
             return res.status(200).json(response)
@@ -242,5 +242,21 @@ export const orderStaffCreatedController = async (req, res) => {
             status: 'err',
             message: e,
         })
+    }
+}
+
+export const patentedOrderController = async (req, res) => {
+    try {
+        const id = req.params.id
+        if(id){
+            const response = await patentedOrderService(id)
+            return res.json(response)
+        }else{
+            return res.status(401).json({
+                message: "Order not found"
+            })
+        }
+    }catch (e) {
+
     }
 }
